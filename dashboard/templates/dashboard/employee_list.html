@@ -1,0 +1,166 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Employee Profiles</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 40px 20px;
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(145deg, #1e3c72, #2a5298);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 50px;
+            color: #ffffff;
+            text-shadow: 0 3px 6px rgba(0,0,0,0.2);
+        }
+
+        .employee-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .employee-card {
+            background: #fff;
+            color: #333;
+            width: 280px;
+            padding: 25px 20px;
+            border-radius: 18px;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+            text-align: center;
+            position: relative;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.5s forwards;
+            transition: all 0.3s ease;
+        }
+
+        .employee-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 20px 30px rgba(0,0,0,0.3);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .profile-pic {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 18px;
+            border: 4px solid #1e3c72;
+            background: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .employee-card:hover .profile-pic {
+            border-color: #2a5298;
+            box-shadow: 0 6px 14px rgba(42, 82, 152, 0.7);
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #222;
+        }
+
+        p {
+            font-size: 0.95rem;
+            color: #555;
+            margin: 4px 0;
+        }
+
+        p strong {
+            color: #1e3c72;
+        }
+
+        .actions {
+            margin-top: 18px;
+            font-size: 0.9rem;
+        }
+
+        .actions a {
+            color: #1e3c72;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        .actions a:hover {
+            color: #2a5298;
+            text-decoration: underline;
+        }
+
+        .no-employees {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #fff;
+            background: #ff4444;
+            padding: 16px 24px;
+            border-radius: 12px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Employee Profiles</h2>
+
+    {% if employees %}
+        <div class="employee-list">
+            {% for employee in employees %}
+                <div class="employee-card">
+                    {% if employee.profile_picture %}
+                        <img src="{{ employee.profile_picture.url }}" alt="Profile Photo" class="profile-pic">
+                    {% else %}
+                        <img src="{% static 'dashboard/img/default_profile.png' %}" alt="Default Profile" class="profile-pic">
+                    {% endif %}
+                    <h3>{{ employee.name }}</h3>
+
+                    <p><strong>Username:</strong> {{ employee.user.username }}</p>
+                    <p><strong>Email:</strong> {{ employee.user.email }}</p>
+                    <p><strong>Phone:</strong> {{ employee.phone }}</p>
+                    <p><strong>Role:</strong> {{ employee.role }}</p>
+
+                    <div class="actions">
+                        <a href="{% url 'edit_employee' employee.pk %}">Edit</a> |
+                        <a href="{% url 'delete_employee' employee.pk %}" onclick="return confirm('Are you sure you want to delete this employee?')">Delete</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="no-employees">No employees found.</div>
+    {% endif %}
+
+</body>
+</html>

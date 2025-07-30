@@ -1,0 +1,120 @@
+<!-- templates/login.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Login</title>
+
+<style>
+  /* Reset some styles */
+  * {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  body {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+  }
+
+  .login-container {
+    background: white;
+    padding: 40px 50px;
+    border-radius: 12px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+    width: 350px;
+    animation: fadeInScale 0.7s ease forwards;
+  }
+
+  @keyframes fadeInScale {
+    0% {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .login-container h2 {
+    margin-bottom: 30px;
+    color: #333;
+    text-align: center;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #444;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 20px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+  }
+
+  input[type="text"]:focus,
+  input[type="password"]:focus {
+    outline: none;
+    border-color: #2575fc;
+  }
+
+  button {
+    width: 100%;
+    background: #2575fc;
+    color: white;
+    border: none;
+    padding: 14px;
+    font-size: 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  button:hover {
+    background: #1a56d1;
+  }
+
+  /* Optional: subtle floating animation on container */
+  .login-container:hover {
+    animation: float 4s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+</style>
+</head>
+<body>
+
+<div class="login-container">
+  <h2>Login</h2>
+  <form method="POST" action="{% url 'login' %}">
+    {% csrf_token %}
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username" placeholder="Enter username" required />
+
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" placeholder="Enter password" required />
+
+    <button type="submit">Login</button>
+  </form>
+</div>
+
+</body>
+</html>

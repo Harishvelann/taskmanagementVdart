@@ -1,0 +1,9 @@
+{% for emp in employees %}
+  <label>
+    <input type="checkbox" name="employees" value="{{ emp.user.id }}"
+      {% if emp.user.id|stringformat:"s" in form.data.employees %}
+        checked
+      {% endif %}>
+    {{ emp.name }}
+  </label><br>
+{% endfor %}

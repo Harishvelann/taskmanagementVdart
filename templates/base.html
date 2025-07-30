@@ -1,0 +1,68 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Task Manager{% endblock %}</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Animate.css (for animation) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+  <!-- Bootstrap CSS (use carefully with Tailwind) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans">
+
+<!-- Main layout -->
+<div class="flex min-h-screen">
+
+  <!-- Sidebar -->
+  <div class="w-64 bg-blue-900 text-white p-6 space-y-6">
+    <h1 class="text-2xl font-bold mb-8">Task Manager</h1>
+    <a href="{% url 'dashboard' %}" class="block py-2 hover:bg-blue-700 rounded">📊 Dashboard</a>
+    <a href="{% url 'manage_users' %}" class="block py-2 hover:bg-blue-700 rounded">👥 Manage Users</a>
+    <a href="{% url 'create_task' %}" class="block py-2 hover:bg-blue-700 rounded">➕ Create Task</a>
+    <a href="{% url 'all_tasks' %}" class="block py-2 hover:bg-blue-700 rounded">📁 All Tasks</a>
+    <a href="{% url 'logout' %}" class="block py-2 hover:bg-blue-700 rounded">🚪 Logout</a>
+  </div>
+
+  <!-- Main content -->
+  <div class="flex-1 p-6">
+
+    <!-- Top Buttons -->
+    <div class="flex flex-wrap gap-4 mb-6">
+      <a href="{% url 'create_task' %}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+        <i class="fas fa-plus mr-1"></i> Create Task
+      </a>
+      <a href="{% url 'employee_list' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+        <i class="fas fa-users mr-1"></i> Employees List
+      </a>
+      <a href="{% url 'add_employee' %}" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
+        <i class="fas fa-user-plus mr-1"></i> Add Employee
+      </a>
+    </div>
+
+    <!-- Optional Stats Section -->
+    {% block stats %}
+    {% endblock %}
+
+    <!-- Main Content -->
+    <div class="mt-6">
+      {% block content %}
+      {% endblock %}
+    </div>
+
+  </div>
+</div>
+
+<!-- Bootstrap JS (at bottom for better load) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

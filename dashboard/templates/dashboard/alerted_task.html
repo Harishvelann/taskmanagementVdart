@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}📢 Alerted Tasks{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-6">
+  <h1 class="text-3xl font-bold mb-8 flex items-center gap-3">
+    📢 Alerted Tasks
+  </h1>
+
+  {% if tasks %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for task in tasks %}
+        <article 
+          class="bg-white p-6 rounded-lg shadow border border-gray-200 hover:shadow-lg transition-shadow duration-300"
+          role="region" 
+          aria-labelledby="task-title-{{ task.id }}"
+        >
+          <h2 id="task-title-{{ task.id }}" class="text-xl font-semibold mb-2">
+            {{ task.title }}
+          </h2>
+
+          <p class="text-sm text-gray-600 mb-1">
+            Assigned by: 
+            <strong>
+              {{ task.assigned_by.get_full_name|default:task.assigned_by.username }}
+            </strong>
+          </p>
+
+          {% if task.due_date %}
+            <p class="text-sm text-gray-700 mb-3">
+              🗓 Due: <time datetime="{{ task.due_date }}">{{ task.due_date|date:"M d, Y" }}</time>
+            </p>
+          {% else %}
+            <p class="text-sm text-gray-500 mb-3 italic">No deadline set</p>
+          {% endif %}
+
+          <p class="text-sm mb-4">
+            Status: 
+            <span class="font-semibold capitalize text-blue-700">
+              {{ task.status }}
+            </span>
+          </p>
+
+          <a href="{% url 'edit_task' task.id %}" 
+             class="inline-block text-blue-600 hover:underline font-medium" 
+             aria-label="Edit task {{ task.title }}">
+            ✏️ Edit Task
+          </a>
+        </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-gray-600 italic">You have no alerted tasks at this time.</p>
+  {% endif %}
+
+  <a href="{% url 'dashboard' %}" 
+     class="mt-8 inline-block bg-blue-600 text-white px-5 py-3 rounded hover:bg-blue-700 transition-colors duration-200" 
+     aria-label="Back to Dashboard">
+    ← Back to Dashboard
+  </a>
+</div>
+{% endblock %}

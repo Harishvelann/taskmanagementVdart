@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block sidebar %}
+<!-- Sidebar -->
+<div class="w-64 min-h-screen bg-blue-900 text-white p-6 space-y-6">
+
+  <!-- Task Count Box -->
+  <div class="bg-purple-600 p-4 rounded-lg shadow-md text-center">
+    <h3 class="text-xl font-bold">{{ task_count }}</h3>
+    <p class="text-sm">All Tasks</p>
+  </div>
+
+  <h1 class="text-2xl font-bold mb-8 mt-6">Task Manager</h1>
+
+  <a href="{% url 'dashboard' %}" class="block py-2 hover:bg-blue-700 rounded">📊 Dashboard</a>
+  <a href="{% url 'manage_users' %}" class="block py-2 hover:bg-blue-700 rounded">👥 Manage Users</a>
+  <a href="{% url 'create_task' %}" class="block py-2 hover:bg-blue-700 rounded">➕ Create Task</a>
+  <a href="{% url 'all_tasks' %}" class="block py-2 hover:bg-blue-700 rounded">📁 All Tasks</a>
+  
+  <!-- 🔔 Notifications link added below -->
+  <a href="{% url 'notifications' %}" class="block py-2 hover:bg-blue-700 rounded">🔔 Notifications</a>
+
+  <a href="{% url 'logout' %}" class="block py-2 hover:bg-blue-700 rounded">🚪 Logout</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<h2 class="text-3xl font-bold mb-8">Welcome, {{ request.user.first_name|default:request.user.username }}</h2>
+
+<!-- Stat Boxes Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+  <div class="bg-blue-500 text-white p-6 rounded-2xl shadow-lg hover:scale-105 transition duration-300">
+    <h3 class="text-xl font-bold mb-2">👥 Employees</h3>
+    <p class="text-3xl">{{ employee_count }}</p>
+  </div>
+
+  <!-- All Tasks Box -->
+  <a href="{% url 'all_tasks' %}">
+    <div class="bg-purple-500 text-white p-6 rounded-2xl shadow-lg hover:scale-105 transition duration-300">
+      <h3 class="text-xl font-bold mb-2">📋 All Tasks</h3>
+      <p class="text-3xl">{{ task_count }}</p>
+    </div>
+  </a>
+
+  <div class="bg-red-500 text-white p-6 rounded-2xl shadow-lg hover:scale-105 transition duration-300">
+    <h3 class="text-xl font-bold mb-2">⏰ Overdue</h3>
+    <p class="text-3xl">{{ overdue_count }}</p>
+  </div>
+
+  <div class="bg-yellow-400 text-black p-6 rounded-2xl shadow-lg hover:scale-105 transition duration-300">
+    <h3 class="text-xl font-bold mb-2">📆 Due Today</h3>
+    <p class="text-3xl">{{ due_today_count }}</p>
+  </div>
+
+  <div class="bg-pink-500 text-white p-6 rounded-2xl shadow-lg hover:scale-105 transition duration-300">
+    <h3 class="text-xl font-bold mb-2">📭 No Deadline</h3>
+    <p class="text-3xl">{{ no_deadline_count }}</p>
+  </div>
+
+  <a href="{% url 'notifications' %}">
+    <div class="bg-orange-500 text-white p-6 rounded-2xl shadow-lg hover:scale-105 transition duration-300">
+      <h3 class="text-xl font-bold mb-2">🔔 Notifications</h3>
+      <p class="text-3xl">{{ notification_count }}</p>
+    </div>
+  </a>
+
+  <div class="bg-gray-700 text-white p-6 rounded-2xl shadow-lg hover:scale-105 transition duration-300">
+    <h3 class="text-xl font-bold mb-2">⌛ Pending</h3>
+    <p class="text-3xl">{{ pending_count }}</p>
+  </div>
+
+  <div class="bg-cyan-500 text-white p-6 rounded-2xl shadow-lg hover:scale-105 transition duration-300">
+    <h3 class="text-xl font-bold mb-2">🚧 In Progress</h3>
+    <p class="text-3xl">{{ in_progress_count }}</p>
+  </div>
+
+  <div class="bg-green-500 text-white p-6 rounded-2xl shadow-lg hover:scale-105 transition duration-300">
+    <h3 class="text-xl font-bold mb-2">✅ Completed</h3>
+    <p class="text-3xl">{{ completed_count }}</p>
+  </div>
+
+</div>
+{% endblock %}

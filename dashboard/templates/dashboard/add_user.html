@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-xl mx-auto bg-white shadow-md rounded p-6 animate__animated animate__fadeIn">
+    <h2 class="text-2xl font-bold mb-4 text-center text-green-700">Add New User</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-4">
+            <label class="block font-semibold text-gray-700 mb-1">Username</label>
+            <input type="text" name="username" class="w-full border rounded p-2" required>
+        </div>
+        <div class="mb-4">
+            <label class="block font-semibold text-gray-700 mb-1">Email</label>
+            <input type="email" name="email" class="w-full border rounded p-2" required>
+        </div>
+        <div class="mb-4">
+            <label class="block font-semibold text-gray-700 mb-1">Password</label>
+            <input type="password" name="password" class="w-full border rounded p-2" required>
+        </div>
+        <div class="mb-4 flex items-center space-x-2">
+            <input type="checkbox" name="is_staff">
+            <label>Is Staff</label>
+        </div>
+        <div class="mb-4 flex items-center space-x-2">
+            <input type="checkbox" name="is_superuser">
+            <label>Is Superuser</label>
+        </div>
+        <div class="flex justify-end space-x-3">
+            <a href="{% url 'manage_users' %}" class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500">Cancel</a>
+            <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Add User</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
