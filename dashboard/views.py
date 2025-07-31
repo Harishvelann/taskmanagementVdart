@@ -10,6 +10,7 @@ from django.contrib import messages
 from .models import Profile, Task, Notification, Employee
 from .forms import AddEmployeeForm, TaskForm, EmployeeForm
 
+
 # ------------------- 🔐 Admin Login -------------------
 def login_view(request):
     if request.method == "POST":
@@ -59,6 +60,7 @@ def create_task(request):
             task.save()
             form.save_m2m()
 
+            # ✅ Create notifications for assigned employees
             if task.alert_all:
                 for employee in task.assigned_employees.all():
                     if employee.user:
@@ -166,10 +168,7 @@ def add_employee(request):
             else:
                 random_password = get_random_string(length=10)
                 user = User.objects.create_user(
-                    username=email,
-                    email=email,
-                    password=random_password,
-                    first_name=name
+                    username=email, email=email, password=random_password, first_name=name
                 )
                 Profile.objects.create(
                     user=user, name=name, phone=phone, role=role,
@@ -180,10 +179,11 @@ def add_employee(request):
                     role=role, profile_picture=profile_picture
                 )
 
+                # Send email
                 try:
                     send_mail(
                         subject='Welcome to TaskPro',
-                        message=(f"Hello {name},\n\nYour account has been created.\nUsername: {email}\nPassword: {random_password}"),
+                        message=f"Hello {name},\n\nYour account has been created.\nUsername: {email}\nPassword: {random_password}",
                         from_email=None,
                         recipient_list=[email],
                         fail_silently=False,
@@ -251,13 +251,13 @@ def alerted_tasks(request):
     alerts.update(is_read=True)
     return render(request, 'dashboard/alerted_tasks.html', {'alerts': alerts})
 
+
 # ------------------- 🔐 Employee Login -------------------
 def employee_login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-        # ✅ Only allow hardcoded credentials
         if username == 'employee' and password == 'employee123':
             request.session['employee_logged_in'] = True
             return redirect('employee_dashboard')
@@ -271,9 +271,7 @@ def employee_dashboard(request):
     if not request.session.get('employee_logged_in'):
         return redirect('employee_login')
 
-    # Show all tasks for the employee dashboard
-    tasks = Task.objects.all().order_by('-created_at')  # Optional ordering newest first
-
+    tasks = Task.objects.all().order_by('-created_at')
     return render(request, 'dashboard/employee_dashboard.html', {'tasks': tasks})
 
 
