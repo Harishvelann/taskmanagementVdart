@@ -50,6 +50,11 @@
             width: 100%;
             padding: 12px;
         }
+
+        .btn-secondary {
+            width: 100%;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -96,7 +101,11 @@
             <label for="id_alert_all" class="form-check-label">Alert All Employees</label>
         </div>
 
+        <!-- Submit Button -->
         <button type="submit" class="btn btn-success">Create Task</button>
+
+        <!-- Back to Dashboard Button -->
+        <a href="{% url 'dashboard' %}" class="btn btn-secondary">⬅ Back to Dashboard</a>
     </form>
 </div>
 

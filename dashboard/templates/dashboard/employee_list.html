@@ -23,9 +23,30 @@
             text-align: center;
             font-size: 3rem;
             font-weight: 700;
-            margin-bottom: 50px;
+            margin-bottom: 20px;
             color: #ffffff;
             text-shadow: 0 3px 6px rgba(0,0,0,0.2);
+        }
+
+        /* Back Button */
+        .back-btn {
+            display: block;
+            width: fit-content;
+            margin: 0 auto 40px auto;
+            background: #ffffff;
+            color: #1e3c72;
+            padding: 10px 20px;
+            font-weight: 600;
+            border-radius: 10px;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #2a5298;
+            color: #fff;
+            transform: translateY(-3px);
         }
 
         .employee-list {
@@ -134,6 +155,9 @@
 <body>
 
     <h2>Employee Profiles</h2>
+
+    <!-- ✅ Back to Dashboard Button -->
+    <a href="{% url 'dashboard' %}" class="back-btn">⬅ Back to Dashboard</a>
 
     {% if employees %}
         <div class="employee-list">

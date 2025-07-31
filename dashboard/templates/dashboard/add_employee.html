@@ -17,6 +17,7 @@
         align-items: center;
         min-height: 100vh;
         padding: 20px;
+        flex-direction: column;
     }
 
     .glass-form {
@@ -97,12 +98,22 @@
         box-shadow: 0 4px 12px rgba(87, 75, 144, 0.4);
     }
 
-    .form-icon {
-        position: absolute;
-        right: 16px;
-        top: 38px;
-        color: #999;
-        font-size: 14px;
+    .btn-back {
+        background: #6c757d;
+        color: #fff;
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 8px 18px;
+        text-decoration: none;
+        margin-bottom: 20px;
+        display: inline-block;
+        transition: 0.3s ease;
+    }
+
+    .btn-back:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
 
     .text-danger {
@@ -112,6 +123,11 @@
 </style>
 
 <div class="form-wrapper">
+    <!-- ✅ Back to Dashboard Button -->
+    <a href="{% url 'dashboard' %}" class="btn-back">
+        <i class="fa fa-arrow-left"></i> Back to Dashboard
+    </a>
+
     <div class="glass-form">
         <div class="form-title">✨ Add New Employee</div>
         <form method="POST" enctype="multipart/form-data">
