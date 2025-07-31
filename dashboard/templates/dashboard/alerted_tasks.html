@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}📢 Alerted Tasks{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded shadow p-6">
+  <h2 class="text-2xl font-bold mb-4">📢 Alerted Tasks</h2>
+
+  {% if alerts %}
+    <ul class="space-y-4">
+      {% for alert in alerts %}
+        <li class="p-4 bg-gray-50 border rounded shadow-sm">
+          <div class="mb-1 font-semibold text-lg">{{ alert.task.title }}</div>
+          <div class="text-sm text-gray-700">{{ alert.message }}</div>
+          <div class="text-xs text-gray-500 mt-2">
+            Assigned by: {{ alert.task.assigned_by.username }} |
+            Created: {{ alert.timestamp|naturaltime }}
+          </div>
+          <a href="{% url 'edit_task' alert.task.id %}" class="text-blue-600 hover:underline text-sm">
+            ✏️ Edit Task
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="text-black-600 italic">No task notifications available.</p>
+  {% endif %}
+
+  <div class="mt-6 flex gap-4">
+    <a href="{% url 'dashboard' %}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+      ← Back to Dashboard
+    </a>
+    <a href="{% url 'alerted_tasks' %}" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+      📢 Refresh Alerts
+    </a>
+  </div>
+</div>
+{% endblock %}

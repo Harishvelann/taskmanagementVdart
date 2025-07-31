@@ -25,10 +25,17 @@
   <!-- Sidebar -->
   <div class="w-64 bg-blue-900 text-white p-6 space-y-6">
     <h1 class="text-2xl font-bold mb-8">Task Manager</h1>
+    
     <a href="{% url 'dashboard' %}" class="block py-2 hover:bg-blue-700 rounded">📊 Dashboard</a>
     <a href="{% url 'manage_users' %}" class="block py-2 hover:bg-blue-700 rounded">👥 Manage Users</a>
     <a href="{% url 'create_task' %}" class="block py-2 hover:bg-blue-700 rounded">➕ Create Task</a>
     <a href="{% url 'all_tasks' %}" class="block py-2 hover:bg-blue-700 rounded">📁 All Tasks</a>
+    
+    <!-- NEW: Employee's My Tasks -->
+    <a href="{% url 'employee_dashboard' %}" class="block py-2 hover:bg-blue-700 rounded">
+      ✅ My Tasks
+    </a>
+
     <a href="{% url 'logout' %}" class="block py-2 hover:bg-blue-700 rounded">🚪 Logout</a>
   </div>
 

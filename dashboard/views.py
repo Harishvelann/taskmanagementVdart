@@ -10,8 +10,7 @@ from django.contrib import messages
 from .models import Profile, Task, Notification, Employee
 from .forms import AddEmployeeForm, TaskForm, EmployeeForm
 
-
-# ------------------- Login -------------------
+# ------------------- 🔐 Admin Login -------------------
 def login_view(request):
     if request.method == "POST":
         username = request.POST['username']
@@ -25,13 +24,13 @@ def login_view(request):
     return render(request, 'login.html')
 
 
-# ------------------- Logout -------------------
+# ------------------- 🚪 Admin Logout -------------------
 def logout_view(request):
     logout(request)
     return redirect('login')
 
 
-# ------------------- Dashboard -------------------
+# ------------------- 📊 Admin Dashboard -------------------
 @login_required
 def dashboard(request):
     today = timezone.now().date()
@@ -49,7 +48,7 @@ def dashboard(request):
     return render(request, 'dashboard/dashboard.html', context)
 
 
-# ------------------- Create Task -------------------
+# ------------------- ✅ Create Task -------------------
 @login_required
 def create_task(request):
     if request.method == "POST":
@@ -60,7 +59,6 @@ def create_task(request):
             task.save()
             form.save_m2m()
 
-            # Notify assigned employees if alert_all is checked
             if task.alert_all:
                 for employee in task.assigned_employees.all():
                     if employee.user:
@@ -76,7 +74,7 @@ def create_task(request):
     return render(request, 'dashboard/create_task.html', {'form': form})
 
 
-# ------------------- Manage Users -------------------
+# ------------------- 👥 Manage Users -------------------
 @login_required
 def manage_users(request):
     if not request.user.is_superuser:
@@ -129,14 +127,13 @@ def delete_user(request, user_id):
     return redirect('manage_users')
 
 
-# ------------------- Employee List -------------------
+# ------------------- 🧑‍💼 Employee Management -------------------
 @login_required
 def employee_list(request):
     employees = Employee.objects.all()
     return render(request, 'dashboard/employee_list.html', {'employees': employees})
 
 
-# ------------------- Add or Edit Employee -------------------
 @login_required
 def add_or_edit_employee(request, pk=None):
     employee = get_object_or_404(Employee, pk=pk) if pk else None
@@ -150,7 +147,6 @@ def add_or_edit_employee(request, pk=None):
     return render(request, 'dashboard/employee_form.html', {'form': form})
 
 
-# ------------------- Add Employee -------------------
 @login_required
 def add_employee(request):
     if not request.user.is_superuser:
@@ -201,7 +197,6 @@ def add_employee(request):
     return render(request, 'dashboard/add_employee.html', {'form': form})
 
 
-# ------------------- Delete Employee -------------------
 @login_required
 def delete_employee(request, pk):
     employee = get_object_or_404(Employee, pk=pk)
@@ -209,14 +204,14 @@ def delete_employee(request, pk):
     return redirect('employee_list')
 
 
-# ------------------- All Tasks -------------------
+# ------------------- 📃 All Tasks -------------------
 @login_required
 def all_tasks(request):
-    tasks = Task.objects.all().order_by('-created_at')
+    tasks = Task.objects.prefetch_related('assigned_employees').order_by('-created_at')
     return render(request, 'dashboard/all_tasks.html', {'tasks': tasks})
 
 
-# ------------------- Edit Task -------------------
+# ------------------- ✏️ Edit Task -------------------
 @login_required
 def edit_task(request, pk):
     task = get_object_or_404(Task, pk=pk)
@@ -231,7 +226,7 @@ def edit_task(request, pk):
     return render(request, 'dashboard/edit_task.html', {'form': form, 'task': task})
 
 
-# ------------------- Delete Task -------------------
+# ------------------- ❌ Delete Task -------------------
 @login_required
 def delete_task(request, pk):
     task = get_object_or_404(Task, pk=pk)
@@ -242,7 +237,7 @@ def delete_task(request, pk):
     return render(request, 'dashboard/confirm_delete.html', {'task': task})
 
 
-# ------------------- View Notifications -------------------
+# ------------------- 🔔 Notifications -------------------
 @login_required
 def view_notifications(request):
     notifications = Notification.objects.filter(user=request.user).order_by('-timestamp')
@@ -250,8 +245,39 @@ def view_notifications(request):
     return render(request, 'dashboard/notifications.html', {'notifications': notifications})
 
 
-# ------------------- View Alerted Tasks (Notifications linked to tasks) -------------------
 @login_required
 def alerted_tasks(request):
-    notifications = Notification.objects.filter(user=request.user, task__isnull=False).order_by('-timestamp')
-    return render(request, 'dashboard/notifications.html', {'notifications': notifications})
+    alerts = Notification.objects.filter(user=request.user, task__isnull=False).order_by('-timestamp')
+    alerts.update(is_read=True)
+    return render(request, 'dashboard/alerted_tasks.html', {'alerts': alerts})
+
+# ------------------- 🔐 Employee Login -------------------
+def employee_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        # ✅ Only allow hardcoded credentials
+        if username == 'employee' and password == 'employee123':
+            request.session['employee_logged_in'] = True
+            return redirect('employee_dashboard')
+        else:
+            messages.error(request, 'Invalid credentials')
+    return render(request, 'dashboard/employee_login.html')
+
+
+# ------------------- 📋 Employee Dashboard -------------------
+def employee_dashboard(request):
+    if not request.session.get('employee_logged_in'):
+        return redirect('employee_login')
+
+    # Show all tasks for the employee dashboard
+    tasks = Task.objects.all().order_by('-created_at')  # Optional ordering newest first
+
+    return render(request, 'dashboard/employee_dashboard.html', {'tasks': tasks})
+
+
+# ------------------- 🚪 Employee Logout -------------------
+def employee_logout(request):
+    request.session.flush()
+    return redirect('employee_login')

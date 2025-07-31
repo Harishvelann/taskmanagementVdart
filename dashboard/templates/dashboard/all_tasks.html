@@ -16,7 +16,7 @@
                     <th>Assigned To</th>
                     <th>Status</th>
                     <th>Due Date</th>
-                    <th>Actions</th> <!-- New Actions Column -->
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -24,7 +24,16 @@
                 <tr>
                     <td>{{ task.id }}</td>
                     <td>{{ task.title }}</td>
-                    <td>{{ task.assigned_to.first_name }}</td>
+
+                    <!-- ✅ Updated Assigned To Column -->
+                    <td>
+                        {% for emp in task.assigned_employees.all %}
+                            {{ emp.name }}{% if not forloop.last %}, {% endif %}
+                        {% empty %}
+                            <span class="text-muted">No one assigned</span>
+                        {% endfor %}
+                    </td>
+
                     <td>
                         {% if task.status == 'completed' %}
                             <span class="badge bg-success">Completed</span>

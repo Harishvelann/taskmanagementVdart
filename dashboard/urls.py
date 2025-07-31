@@ -1,8 +1,13 @@
 from django.urls import path  # type: ignore
 from . import views
 
+
 urlpatterns = [
     path('login/', views.login_view, name='login'),
+    path('employee-login/', views.employee_login, name='employee_login'),
+    path('employee-dashboard/', views.employee_dashboard, name='employee_dashboard'),
+    path('employee-logout/', views.employee_logout, name='employee_logout'),
+
     path('logout/', views.logout_view, name='logout'),
     path('dashboard/', views.dashboard, name='dashboard'),
 
@@ -29,4 +34,6 @@ urlpatterns = [
 
     # Homepage as dashboard
     path('', views.dashboard, name='dashboard'),
+# type: ignore
+
 ]
