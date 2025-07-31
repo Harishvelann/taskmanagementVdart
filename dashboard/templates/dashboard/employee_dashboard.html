@@ -8,6 +8,8 @@
             <tr>
                 <th>ID</th>
                 <th>Title</th>
+                <th>Description</th> <!-- ✅ Added Description -->
+                <th>Assigned To</th> <!-- ✅ Added Assigned Employees -->
                 <th>Status</th>
                 <th>Due Date</th>
             </tr>
@@ -17,6 +19,16 @@
             <tr>
                 <td>{{ task.id }}</td>
                 <td>{{ task.title }}</td>
+                <td>{{ task.description }}</td> <!-- ✅ Show Task Description -->
+
+                <td>
+                    {% for emp in task.assigned_employees.all %}
+                        {{ emp.name }}{% if not forloop.last %}, {% endif %}
+                    {% empty %}
+                        <span class="text-muted">Not Assigned</span>
+                    {% endfor %}
+                </td>
+
                 <td>
                     {% if task.status == 'pending' %}
                         <span class="badge bg-warning text-dark">Pending</span>
@@ -30,7 +42,7 @@
             </tr>
             {% empty %}
             <tr>
-                <td colspan="4">No tasks found.</td>
+                <td colspan="6">No tasks found.</td> <!-- ✅ Updated colspan -->
             </tr>
             {% endfor %}
         </tbody>
