@@ -29,8 +29,7 @@ urlpatterns = [
     path('delete-user/<int:user_id>/', views.delete_user, name='delete_user'),
 
     # ✅ Updated notification route name for template compatibility
-    path('notifications/', views.view_notifications, name='notifications'),
-    path('alerted-tasks/', views.alerted_tasks, name='alerted_tasks'),
+    
 
     # Homepage as dashboard
     path('', views.dashboard, name='dashboard'),

@@ -2,6 +2,13 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
+# Define role choices for user profiles
+ROLE_CHOICES = (
+    ('admin', 'Admin'),
+    ('manager', 'Manager'),
+    ('employee', 'Employee'),
+)
+
 class Employee(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=100, null=True, blank=True)
@@ -32,7 +39,7 @@ class Task(models.Model):
     ]
 
     title = models.CharField(max_length=255)
-    description = models.TextField()  # ✅ Description is already here
+    description = models.TextField()
     due_date = models.DateField(null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=STATUS_PENDING)
     assigned_by = models.ForeignKey(
@@ -53,19 +60,9 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, null=True, blank=True)
     phone = models.CharField(max_length=15)
-    role = models.CharField(max_length=50)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
     profile_picture = models.ImageField(upload_to='profile_pics/', default='default.jpg')
     email = models.EmailField()
 
     def __str__(self):
         return self.name or self.user.username
-
-class Notification(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    task = models.ForeignKey(Task, on_delete=models.CASCADE, null=True, blank=True)
-    message = models.TextField()
-    timestamp = models.DateTimeField(default=timezone.now)
-    is_read = models.BooleanField(default=False)
-
-    def __str__(self):
-        return f"{self.user.username} - {self.message[:50]}"

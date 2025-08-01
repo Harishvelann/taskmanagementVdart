@@ -7,7 +7,7 @@ from django.utils.crypto import get_random_string
 from django.core.mail import send_mail
 from django.contrib import messages
 
-from .models import Profile, Task, Notification, Employee
+from .models import Profile, Task, Employee
 from .forms import AddEmployeeForm, TaskForm, EmployeeForm
 
 
@@ -44,7 +44,7 @@ def dashboard(request):
         'pending_count': Task.objects.filter(status='pending').count(),
         'in_progress_count': Task.objects.filter(status='in_progress').count(),
         'completed_count': Task.objects.filter(status='completed').count(),
-        'notification_count': Notification.objects.filter(user=request.user, is_read=False).count(),
+        
     }
     return render(request, 'dashboard/dashboard.html', context)
 
@@ -60,15 +60,7 @@ def create_task(request):
             task.save()
             form.save_m2m()
 
-            # ✅ Create notifications for assigned employees
-            if task.alert_all:
-                for employee in task.assigned_employees.all():
-                    if employee.user:
-                        Notification.objects.create(
-                            user=employee.user,
-                            task=task,
-                            message=f"You have been assigned a new task: '{task.title}' by {request.user.username}."
-                        )
+        
             messages.success(request, "Task created successfully!")
             return redirect('dashboard')
     else:
@@ -237,19 +229,7 @@ def delete_task(request, pk):
     return render(request, 'dashboard/confirm_delete.html', {'task': task})
 
 
-# ------------------- 🔔 Notifications -------------------
-@login_required
-def view_notifications(request):
-    notifications = Notification.objects.filter(user=request.user).order_by('-timestamp')
-    notifications.filter(is_read=False).update(is_read=True)
-    return render(request, 'dashboard/notifications.html', {'notifications': notifications})
 
-
-@login_required
-def alerted_tasks(request):
-    alerts = Notification.objects.filter(user=request.user, task__isnull=False).order_by('-timestamp')
-    alerts.update(is_read=True)
-    return render(request, 'dashboard/alerted_tasks.html', {'alerts': alerts})
 
 
 # ------------------- 🔐 Employee Login -------------------
